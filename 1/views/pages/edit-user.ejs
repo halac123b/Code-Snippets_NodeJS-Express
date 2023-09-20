@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ("../partials/header") %>
+
+<body>
+    <h1>safss</h1>
+    <div class="container">
+        <%- include ("../partials/nav") %>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h1>Add User</h1>
+
+            <form>
+                <input type="hidden" id="id" name="id">
+                <label>Name</label><br>
+                <input type="text" name="name" id="name" class="form-control">
+                <label>Phone</label><br>
+                <input type="text" name="phone" id="phone" class="form-control">
+                <label>Password</label><br>
+                <input type="password" name="password" id="password" class="form-control">
+                <button id="submitEditUser" class="btn btn-primary btn-lg">Submit</button>
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+        // href of current page
+        const url = window.location.href;
+        // Get the id from the URL
+        const id = url.substring(url.lastIndexOf("/") + 1);
+        fetch("/listSingle", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id
+            })
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                document.querySelector("#id").value = data[0].id;
+                document.querySelector("#name").value = data[0].name;
+                document.querySelector("#phone").value = data[0].phone;
+                document.querySelector("#password").value = data[0].password;
+            });
+        document.querySelector("#submitEditUser").addEventListener("click", (e) => {
+            // Cancel event nếu nó bị cancel, chứ k chạy dedault event
+            e.preventDefault();
+
+            const id = document.querySelector("#id").value;
+            const name = document.querySelector("#name").value;
+            const phone = document.querySelector("#phone").value;
+            const password = document.querySelector("#password").value;
+
+            if (!id){
+                alert("You are missing your user ID");
+                return;
+            }
+            if (!name || !phone || !password){
+                alert("Please fill out all fields");
+            }
+
+            fetch("/editUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id,
+                    name,
+                    phone,
+                    password
+                })
+            })
+                .then((response) => {
+                    if (response.redirected){
+                        window.location.href = response.url;
+                    }
+                })
+        })
+    </script>
+
+    <%- include ("../partials/footer") %>
+</body>
+</html>

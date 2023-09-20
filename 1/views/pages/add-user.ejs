@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ("../partials/header") %>
+
+<body>
+    <h1>safss</h1>
+    <div class="container">
+        <%- include ("../partials/nav") %>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h1>Add User</h1>
+
+            <form>
+                <label>Name</label><br>
+                <input type="text" name="name" id="name" class="form-control">
+                <label>Phone</label><br>
+                <input type="text" name="phone" id="phone" class="form-control">
+                <label>Password</label><br>
+                <input type="password" name="password" id="password" class="form-control">
+                <button id="submitNewUser" class="btn btn-primary btn-lg">Submit</button>
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+        document.querySelector("#submitNewUser").addEventListener("click", (e) => {
+            // Cancel event nếu nó bị cancel, chứ k chạy dedault event
+            e.preventDefault();
+            const name = document.querySelector("#name").value;
+            const phone = document.querySelector("#phone").value;
+            const password = document.querySelector("#password").value;
+
+            if (!name || !phone || !password){
+                alert("Please fill out all fields");
+            }
+
+            fetch("/addUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name,
+                    phone,
+                    password
+                })
+            })
+                .then((response) => {
+                    if (response.redirected){
+                        window.location.href = response.url;
+                    }
+                })
+        })
+    </script>
+
+    <%- include ("../partials/footer") %>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ("../partials/header") %>
+
+<body>
+    <h1>safss</h1>
+    <div class="container">
+        <%- include ("../partials/nav") %>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h1>User Info</h1>
+
+            <span id="name"></span><br>
+            <small><em>Full Name</em></small>
+            <br><br>
+            <span id="phone"></span>
+
+        </div>
+    </div>
+
+    <script>
+        // href of current page
+        const url = window.location.href;
+        // Get the id from the URL
+        const id = url.substring(url.lastIndexOf("/") + 1);
+        fetch("/listSingle", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id
+            })
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data[0]);
+                document.querySelector("#name").textContent = data[0].name;
+                document.querySelector("#phone").textContent = data[0].phone;
+            });
+    </script>
+
+    <%- include ("../partials/footer") %>
+</body>
+</html>

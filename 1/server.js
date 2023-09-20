@@ -13,6 +13,8 @@ app.set("view engine", "ejs");
 
 // Use middleware at specific path
 app.use("/", routes);
+// Link to folder css
+app.use(express.static(path.join(__dirname, "sass")));
 
 // Nếu path không vào đc middleware route thì hiện 404
 app.use((request, response, next) => {
