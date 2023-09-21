@@ -3,6 +3,7 @@ const port = process.env.PORT || 8081;
 
 const express = require("express");
 const routes = require("./routes");
+const sample = require("./routes/sample/sample");
 const path = require("path")
 
 const app = express();
@@ -13,6 +14,8 @@ app.set("view engine", "ejs");
 
 // Use middleware at specific path
 app.use("/", routes);
+app.use("/", sample);
+
 // Link to folder css
 app.use(express.static(path.join(__dirname, "sass")));
 
